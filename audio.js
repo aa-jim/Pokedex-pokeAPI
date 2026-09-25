@@ -49,6 +49,7 @@ const phoneticDictionary = {
   "gardevoir": "gar-duh-vwar",
   "garganacl": "gar-gan-uh-cul",
   "geodude": "jee-oh-dude",
+  "gengar": "ggen-gar",
   "gholdengo": "ghoul-den-go",
   "girafarig": "jeh-raff-uh-rig",
   "giratina": "geer-uh-tee-nuh",
