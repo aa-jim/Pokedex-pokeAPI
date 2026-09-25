@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PokeDex</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Main Pokédex shell -->
+    <div class="pokedex-wrapper">
+      <div class="pokedex-half top-half">
+        <div class="upper-body">
+          <!-- Searchbar -->
+          <div class="searchbar">
+            <input
+              type="text"
+              id="searchInput"
+              aria-label="Pokémon name"
+              placeholder="POKEMON NAME..."
+              value="rayquaza"
+            />
+            <button onclick="fetchData()" id="searchBtn">SEARCH</button>
+          </div>
+
+          <!-- Quick search -->
+          <div class="quick-search">
+            <button class="quick-btn" value="rayquaza">RAYQUAZA</button>
+            <button class="quick-btn" value="gardevoir">GARDEVOIR</button>
+            <button class="quick-btn" value="gengar">GENGAR</button>
+            <button class="quick-btn" value="groudon">GROUDON</button>
+          </div>
+
+          <div class="top-screen">
+            <!-- Sprite -->
+            <div class="img-box">
+              <button
+                class="audio-toggle"
+                id="audioToggle"
+                type="button"
+                aria-label="Mute audio"
+                aria-pressed="false"
+                title="Mute audio"
+              >
+                <!-- Lucid icon for sound button -->
+                <svg
+                  class="audio-icon audio-icon-on lucide lucide-volume-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+
+                <svg
+                  class="audio-icon audio-icon-off lucide lucide-volume-x hidden"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <line x1="23" y1="9" x2="17" y2="15"></line>
+                  <line x1="17" y1="9" x2="23" y2="15"></line>
+                  <path d="M11 5 6 9H2v6h4l5 5V5z"></path>
+                </svg>
+              </button>
+
+              <img class="hidden" alt="" aria-hidden="true" id="pokeimg" />
+
+              <div
+                id="loadingState"
+                class="hidden"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                <img
+                  src="assets/images/loading.png"
+                  alt=""
+                  aria-hidden="true"
+                  class="spinner-img"
+                />
+                <p class="loading-text">LOADING...</p>
+              </div>
+
+              <div
+                id="errorState"
+                class="hidden"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+              >
+                <p class="error-text"></p>
+              </div>
+            </div>
+
+            <!-- Previous/next navigation -->
+            <nav class="pokemon-navigation" aria-label="Pokémon navigation">
+              <button
+                class="quick-btn"
+                id="previous-pokemon"
+                type="button"
+                aria-label="Previous Pokémon"
+                disabled
+              >
+                &lt; PREV
+              </button>
+              <button
+                class="quick-btn"
+                id="next-pokemon"
+                type="button"
+                aria-label="Next Pokémon"
+                disabled
+              >
+                NEXT &gt;
+              </button>
+            </nav>
+
+            <!-- Summary data -->
+            <div class="top-data">
+              <div class="data-badge id-badge">
+                <span class="label">ID</span>
+                <span id="pokeId">---</span>
+              </div>
+
+              <div class="data-badge name-badge">
+                <span class="label">NAME</span>
+                <span id="pokeName">---</span>
+              </div>
+
+              <div class="data-badge type-badge">
+                <span class="label">TYPE</span>
+                <div id="pokeType"></div>
+              </div>
+
+              <div class="data-badge phys-badge">
+                <div class="phys-item">
+                  <span class="label">H:</span>
+                  <span id="pokeHeight">--</span>
+                </div>
+                <div class="phys-item">
+                  <span class="label">W:</span>
+                  <span id="pokeWeight">--</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Device hinge -->
+      <div class="hinge">
+        <div class="hinge-joint"></div>
+        <div class="hinge-joint"></div>
+      </div>
+
+      <!-- Stats, abilities, and moves -->
+      <div class="pokedex-half bottom-half">
+        <div class="lower-body">
+          <div class="tab-header">
+            <button
+              class="arrow"
+              id="prev-btn"
+              type="button"
+              aria-label="Previous tab"
+            >
+              &lt;
+            </button>
+            <span class="tab-label">BASE STATS</span>
+            <button
+              class="arrow"
+              id="next-btn"
+              type="button"
+              aria-label="Next tab"
+            >
+              &gt;
+            </button>
+          </div>
+
+          <div class="bottom-screen">
+            <div class="tab-content" id="pokeStats"></div>
+            <div class="tab-content hidden" id="pokeAbilities"></div>
+            <div class="tab-content hidden" id="pokeMoves">
+              <p class="moves-count" id="movesCount"></p>
+              <div class="moves-list" id="pokeMovesList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="audio.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
